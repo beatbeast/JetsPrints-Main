@@ -1,0 +1,13 @@
+[01-Aug-2020 09:07:06 UTC] PHP Warning:  require_once(/home3/jetsprin/public_html/wp-content/plugins/jetpack/vendor/automattic/jetpack-backup/actions.php): failed to open stream: No such file or directory in /home3/jetsprin/public_html/wp-content/plugins/jetpack/vendor/class-files-handler.php on line 106
+[01-Aug-2020 09:07:06 UTC] PHP Fatal error:  require_once(): Failed opening required '/home3/jetsprin/public_html/wp-content/plugins/jetpack/vendor/automattic/jetpack-backup/actions.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home3/jetsprin/public_html/wp-content/plugins/jetpack/vendor/class-files-handler.php on line 106
+[01-Aug-2020 09:32:29 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function acf_register_plugin_update() in /home3/jetsprin/public_html/wp-content/plugins/advanced-custom-fields-pro/pro/updates.php:55
+Stack trace:
+#0 /home3/jetsprin/public_html/wp-includes/class-wp-hook.php(287): acf_pro_updates->init('')
+#1 /home3/jetsprin/public_html/wp-includes/class-wp-hook.php(311): WP_Hook->apply_filters(NULL, Array)
+#2 /home3/jetsprin/public_html/wp-includes/plugin.php(478): WP_Hook->do_action(Array)
+#3 /home3/jetsprin/public_html/wp-settings.php(540): do_action('init')
+#4 /home3/jetsprin/public_html/wp-config.php(90): require_once('/home3/jetsprin...')
+#5 /home3/jetsprin/public_html/wp-load.php(37): require_once('/home3/jetsprin...')
+#6 /home3/jetsprin/public_html/wp-admin/admin-ajax.php(22): require_once('/home3/jetsprin...')
+#7 {main}
+  thrown in /home3/jetsprin/public_html/wp-content/plugins/advanced-custom-fields-pro/pro/updates.php on line 55

@@ -1,0 +1,6 @@
+2020-07-15T09:12:46+00:00 CRITICAL Out of memory (allocated 16777216) (tried to allocate 65536 bytes) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\material-wp\paradox\inc\titan-framework\lib\class-option-code.php on line 170
+
+2020-07-15T09:32:55+00:00 CRITICAL syntax error, unexpected end of file in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\includes\main-nav.php on line 110
+
+2020-07-15T09:34:17+00:00 CRITICAL syntax error, unexpected end of file in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\includes\main-nav.php on line 110
+

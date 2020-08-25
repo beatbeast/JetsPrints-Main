@@ -1,0 +1,12 @@
+2020-07-26T08:34:37+00:00 CRITICAL syntax error, unexpected end of file, expecting elseif (T_ELSEIF) or else (T_ELSE) or endif (T_ENDIF) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\category.php on line 54
+
+2020-07-26T08:36:03+00:00 CRITICAL syntax error, unexpected 'else' (T_ELSE) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\pricing.php on line 60
+
+2020-07-26T08:36:54+00:00 CRITICAL syntax error, unexpected 'else' (T_ELSE) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\pricing.php on line 60
+
+2020-07-26T08:37:17+00:00 CRITICAL syntax error, unexpected 'else' (T_ELSE) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\pricing.php on line 60
+
+2020-07-26T08:38:34+00:00 CRITICAL syntax error, unexpected 'endif' (T_ENDIF) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\pricing.php on line 70
+
+2020-07-26T08:38:50+00:00 CRITICAL syntax error, unexpected end of file in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\pricing.php on line 183
+

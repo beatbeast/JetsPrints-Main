@@ -1,0 +1,16 @@
+2020-07-11T10:05:59+00:00 CRITICAL require(): Failed opening required '' (include_path='.;C:\php\pear') in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\jetpack\vendor\class-autoloader-handler.php on line 87
+
+2020-07-11T10:06:10+00:00 CRITICAL require(): Failed opening required '' (include_path='.;C:\php\pear') in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\jetpack\vendor\class-autoloader-handler.php on line 87
+
+2020-07-11T10:06:37+00:00 CRITICAL require(): Failed opening required '' (include_path='.;C:\php\pear') in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\jetpack\vendor\class-autoloader-handler.php on line 87
+
+2020-07-11T10:07:15+00:00 CRITICAL require(): Failed opening required '' (include_path='.;C:\php\pear') in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\jetpack\vendor\class-autoloader-handler.php on line 87
+
+2020-07-11T22:51:35+00:00 CRITICAL require(): Failed opening required 'inc/class-storefront.php' (include_path='.;C:\php\pear') in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 27
+
+2020-07-11T22:52:00+00:00 CRITICAL require(): Failed opening required 'inc/class-storefront.php' (include_path='.;C:\php\pear') in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 27
+
+2020-07-11T22:52:11+00:00 CRITICAL require(): Failed opening required 'inc/class-storefront.php' (include_path='.;C:\php\pear') in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 27
+
+2020-07-11T22:53:06+00:00 CRITICAL require(): Failed opening required 'inc/class-storefront.php' (include_path='.;C:\php\pear') in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 27
+
