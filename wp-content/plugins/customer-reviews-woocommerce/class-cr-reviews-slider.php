@@ -29,7 +29,9 @@ final class CR_Reviews_Slider {
 
 		if( 'no' !== $shortcode_enabled_slider || 'no' !== $shortcode_enabled_tbadge ) {
 			add_action( 'init', array( $this, 'register_slider_script' ) );
+            add_action( 'init', array( $this, 'register_block' ) );
 			add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_scripts' ) );
+            add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_scripts' ) );
 		}
 	}
 
@@ -37,10 +39,117 @@ final class CR_Reviews_Slider {
 		add_shortcode( 'cusrev_reviews_slider', array( $this, 'render_reviews_slider_shortcode' ) );
 	}
 
+    /**
+     * Register the Reviews Slider Block.
+     *
+     */
+    public function register_block() {
+        if ( function_exists( 'register_block_type' ) ) {
+            register_block_type( 'ivole/cusrev-reviews-slider', array(
+                'editor_script' => 'ivole-wc-components',
+
+                'editor_style'  => 'ivole-wc-components',
+
+                'attributes' => array(
+                    'count' => array(
+                        'type' => 'number',
+                        'default' => 3,
+                        'minimum' => 1,
+                        'maximum' => 6
+                    ),
+                    'slides_to_show' => array(
+                        'type' => 'number',
+                        'default' => 3,
+                        'minimum' => 1,
+                        'maximum' => 6
+                    ),
+                    'show_products' => array(
+                        'type' => 'boolean',
+                        'default' => true
+                    ),
+                    'product_links' => array(
+                        'type' => 'boolean',
+                        'default' => true
+                    ),
+                    'sort_by' => array(
+                        'type' => 'string',
+                        'enum' => array( 'date', 'rating' ),
+                        'default' => 'date'
+                    ),
+                    'sort' => array(
+                        'type' => 'string',
+                        'enum' => array( 'ASC', 'DESC', 'RAND' ),
+                        'default' => 'DESC'
+                    ),
+                    'categories' => array(
+                        'type' => 'array',
+                        'default' => array(),
+                        'items' => array(
+                            'type' => 'integer',
+                            'minimum' => 1
+                        )
+                    ),
+                    'products' => array(
+                        'type' => 'array',
+                        'default' => array(),
+                        'items' => array(
+                            'type' => 'integer',
+                            'minimum' => 1
+                        )
+                    ),
+                    'color_ex_brdr' => array(
+                        'type' => 'string',
+                        'default' => '#ebebeb'
+                    ),
+                    'color_brdr' => array(
+                        'type' => 'string',
+                        'default' => '#ebebeb'
+                    ),
+                    'color_bcrd' => array(
+                        'type' => 'string',
+                        'default' => '#fbfbfb'
+                    ),
+                    'color_pr_bcrd' => array(
+                        'type' => 'string',
+                        'default' => '#f2f2f2'
+                    ),
+                    'color_stars' => array(
+                        'type' => 'string',
+                        'default' => '#6bba70'
+                    ),
+                    'shop_reviews' => array(
+                        'type' => 'boolean',
+                        'default' => false
+                    ),
+                    'count_shop_reviews' => array(
+                        'type' => 'number',
+                        'default' => 1,
+                        'minimum' => 0,
+                        'maximum' => 3
+                    ),
+                    'inactive_products' => array(
+                        'type' => 'boolean',
+                        'default' => false
+                    ),
+                    'autoplay' => array(
+                        'type' => 'boolean',
+                        'default' => false
+                    ),
+                    'avatars' => array(
+                        'type' => 'boolean',
+                        'default' => true
+                    )
+                ),
+
+                'render_callback' => array( $this, 'render_reviews_slider' )
+            ));
+        }
+    }
+
 	public function render_reviews_slider( $attributes ) {
 		if ( get_option( 'ivole_reviews_shortcode', 'no' ) === 'no' ) {
-      return '';
-    }
+		    return '';
+        }
 		wp_enqueue_script( 'cr-reviews-slider' );
 		$max_reviews = $attributes['count'];
 		$order_by = $attributes['sort_by'] === 'date' ? 'comment_date_gmt' : 'rating';
@@ -188,7 +297,7 @@ final class CR_Reviews_Slider {
 			'dots'              => true,
 			'slidesToShow'      => $attributes['slides_to_show'],
 			'slidesToScroll'    => 1,
-			'respondTo'					=> 'min',
+			//'respondTo'			=> 'min',
 			'adaptiveHeight'    => true,
 			'autoplay'          => $attributes['autoplay'],
 			'responsive'        => array(
@@ -300,6 +409,10 @@ final class CR_Reviews_Slider {
 		global $current_screen;
 		wp_enqueue_style( 'ivole-reviews-grid' );
 	}
+
+	public function enqueue_block_editor_scripts(){
+        wp_enqueue_script( 'cr-reviews-slider' );
+    }
 
 	private static function compare_dates_sort( $a, $b ) {
 		if( 'rating' === CR_Reviews_Slider::$sort_order_by ) {

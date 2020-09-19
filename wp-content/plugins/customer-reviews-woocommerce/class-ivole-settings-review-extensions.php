@@ -134,11 +134,12 @@ and this leads to two lightboxes shown after clicking on an image attached to a 
             ),
             array(
                 'title'   => __( 'Reviews Shortcodes', IVOLE_TEXT_DOMAIN ),
-                'desc'    => __( 'Enable shortcodes and Gutenberg blocks<br><br>- Use <strong>[cusrev_reviews]</strong> shortcode to display reviews at different locations on product pages. ' .
+                'desc'    => __( 'Enable shortcodes and Gutenberg blocks', IVOLE_TEXT_DOMAIN ) . '<br><br>' .
+                    __( '- Use <strong>[cusrev_reviews]</strong> shortcode to display reviews at different locations on product pages. ' .
                     'You can use this shortcode as <b>[cusrev_reviews comment_file=”/comments.php”]</b> or simply as <b>[cusrev_reviews]</b>. ' .
                     'Here, \'comment_file\' is an optional argument. If you have a custom comment file, you should specify it here. ' .
-                    'This shortcode works ONLY on WooCommerce single product pages.<br><br>' .
-                    '- Use <strong>[cusrev_all_reviews]</strong> shortcode to display a list of all product reviews on any page or post. ' .
+                    'This shortcode works ONLY on WooCommerce single product pages.', IVOLE_TEXT_DOMAIN ) . '<br><br>' .
+                    __( '- Use <strong>[cusrev_all_reviews]</strong> shortcode to display a list of all product reviews on any page or post except product pages. ' .
                     'This shortcode supports arguments: <b>[cusrev_all_reviews sort="DESC" per_page="10" number="-1" show_summary_bar="true" show_pictures="false" ' .
                     'show_products="true" categories="" products="" shop_reviews="true" number_shop_reviews="-1" inactive_products="false" show_replies="false"]</b>.' .
                     '<ul><li><b>"sort"</b> argument accepts "ASC" to show oldest reviews first and "DESC" to show newest reviews first.</li><li><b>"per_page"</b> argument ' .
@@ -153,10 +154,10 @@ and this leads to two lightboxes shown after clicking on an image attached to a 
                     'reviews will be shown.</li><li><b>"number_shop_reviews"</b> argument defines the total number of shop reviews to show. If you set ' .
                     '"number_shop_reviews" to "-1", then all shop reviews will be shown.</li><li><b>"inactive_products"</b> argument accepts "true" or "false" and specifies if ' .
                     'reviews corresponding to unpublished products will be shown.</li><li><b>"show_replies"</b> argument accepts "true" or "false" and specifies if ' .
-                    'replies to reviews will be shown.</li></ul><br>' .
-                    '- Use <strong>[cusrev_reviews_grid]</strong> shortcode to display a grid of reviews on any page or post. This shortcode ' .
+                    'replies to reviews will be shown.</li></ul>', IVOLE_TEXT_DOMAIN ) . '<br>' .
+                    __( '- Use <strong>[cusrev_reviews_grid]</strong> shortcode to display a grid of reviews on any page or post. This shortcode ' .
                     'supports arguments: <b>[cusrev_reviews_grid count="3" show_products="true" product_links="true" sort_by="date" sort="DESC" categories="" ' .
-                    'products="" color_ex_brdr="#ebebeb" color_brdr="#ebebeb" color_ex_bcrd="" color_bcrd="#fbfbfb" color_pr_bcrd="#f2f2f2" shop_reviews="false" count_shop_reviews="1" inactive_products="false" avatars="true"]</b>.' .
+                    'products="" color_ex_brdr="#ebebeb" color_brdr="#ebebeb" color_ex_bcrd="" color_bcrd="#fbfbfb" color_pr_bcrd="#f2f2f2" shop_reviews="false" count_shop_reviews="1" inactive_products="false" avatars="true" show_more="0"]</b>.' .
                     '<ul><li><b>"count"</b> argument defines the number of product reviews to show. It is recommended to keep it between 1 and 9.</li><li><b>"show_products"</b> argument ' .
                     'accepts "true" or "false" and defines if pictures and names of products corresponding to the review will be shown below the review.</li>' .
                     '<li><b>"product_links"</b> argument accepts "true" or "false" and defines if product names will include links to product pages.</li>' .
@@ -169,9 +170,11 @@ and this leads to two lightboxes shown after clicking on an image attached to a 
                     'a hex color code of the background color of product areas on review cards.</li><li><b>"shop_reviews"</b> argument accepts "true" or "false" and specifies if general shop ' .
                     'reviews will be shown.</li><li><b>"count_shop_reviews"</b> argument defines the total number of shop reviews to show. It is recommended to keep it between 0 and 3.</li>' .
                     '<li><b>"inactive_products"</b> argument accepts "true" or "false" and specifies if reviews corresponding to unpublished products will be shown.</li>' .
-                    '<li><b>"avatars"</b> argument accepts "true" or "false" and defines if reviews will include avatars of customers.</li></ul><br>' .
-                    '- <strong>[cusrev_reviews_grid]</strong> shortcode is also available as <strong>Reviews Grid</strong> block in the new WordPress Gutenberg page editor (blocks require WordPress 5.0 or newer).', IVOLE_TEXT_DOMAIN ) .
-                    '<br><br>' . __( '- Use <strong>[cusrev_reviews_slider]</strong> shortcode to display a slider with reviews on any page or post. This shortcode ' .
+                    '<li><b>"avatars"</b> argument accepts "true" or "false" and defines if reviews will include avatars of customers.</li>' .
+                    '<li><b>"show_more"</b> argument defines the number of additional reviews to display after a user presses the "Show more" button. If this argument is 0, then "Show more" button will be hidden.</li>' .
+                    '</ul>', IVOLE_TEXT_DOMAIN ) . '<br>' .
+                    __( '- <strong>[cusrev_reviews_grid]</strong> shortcode is also available as <strong>Reviews Grid</strong> block in the new WordPress Gutenberg page editor (blocks require WordPress 5.0 or newer).', IVOLE_TEXT_DOMAIN ) . '<br><br>' .
+                    __( '- Use <strong>[cusrev_reviews_slider]</strong> shortcode to display a slider with reviews on any page or post. This shortcode ' .
                     'supports arguments: <b>[cusrev_reviews_slider count="5" slides_to_show="3" show_products="true" product_links="true" sort_by="date" sort="DESC" categories="" ' .
                     'products="" color_brdr="#ebebeb" color_bcrd="#fbfbfb" color_pr_bcrd="#f2f2f2" color_stars="#6bba70" shop_reviews="false" count_shop_reviews="1" inactive_products="false" autoplay="false" avatars="true"]</b>. ' .
                     '<ul><li><b>"count"</b> argument defines the number of product reviews to show. It is recommended to keep it between 0 and 5. If you do not want to show product reviews, ' .
@@ -187,7 +190,8 @@ and this leads to two lightboxes shown after clicking on an image attached to a 
                     'reviews will be shown.</li><li><b>"count_shop_reviews"</b> argument defines the total number of shop reviews to show. It is recommended to keep it between 0 and 5.</li><li>' .
                     '<b>"inactive_products"</b> argument accepts "true" or "false" and specifies if reviews corresponding to unpublished products will be shown.</li><li>' .
                     '<b>"autoplay"</b> argument accepts "true" or "false" and defines if the slider will slide automatically.</li><li>' .
-                    '<b>"avatars"</b> argument accepts "true" or "false" and defines if the slider will show avatars of customers.</li></ul>', IVOLE_TEXT_DOMAIN ),
+                    '<b>"avatars"</b> argument accepts "true" or "false" and defines if the slider will show avatars of customers.</li></ul>', IVOLE_TEXT_DOMAIN ) . '<br>' .
+                    __( '- <strong>[cusrev_reviews_slider]</strong> shortcode is also available as <strong>Reviews Slider</strong> block in the new WordPress Gutenberg page editor (blocks require WordPress 5.0 or newer).', IVOLE_TEXT_DOMAIN ),
                 'id'      => 'ivole_reviews_shortcode',
                 'default' => 'no',
                 'type'    => 'checkbox'

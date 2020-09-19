@@ -284,8 +284,9 @@ if (! class_exists('Ivole_All_Reviews')) :
                 'type'         => 'plain');
 
             // ECHO THE PAGENATION
+            $return .= '<div class="cr-all-reviews-pagination">';
             $return .= paginate_links($args);
-            $return .= '</div>';
+            $return .= '</div></div>';
             return $return;
         }
 

@@ -1,0 +1,20 @@
+2020-09-17T17:45:48+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\plugin.php on line 923
+
+2020-09-17T17:47:23+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-admin\includes\class-wp-privacy-requests-table.php on line 456
+
+2020-09-17T17:47:23+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-admin\includes\class-wp-privacy-requests-table.php on line 456
+
+2020-09-17T19:07:58+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\l10n.php on line 741
+
+ges\action-scheduler\classes\abstracts\ActionScheduler.php on line 305
+
+2020-09-17T19:30:07+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\mailchimp-for-wp\integrations\ninja-forms-2\class-ninja-forms.php on line 10
+
+2020-09-17T19:30:08+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\options-page-admin-for-acf\api-template.php on line 9
+
+2020-09-17T19:32:07+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 163
+
+2020-09-17T22:41:50+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 163
+
+2020-09-17T22:43:20+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 441
+

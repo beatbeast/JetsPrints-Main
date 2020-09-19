@@ -39,5 +39,20 @@ if ( $rating_count > 0 ) : ?>
 			<?php // phpcs:enable ?>
 		<?php endif ?>
 	</div>
+	<div class="product-review">
+        <div class="rating">        	
+		<?php echo wc_get_rating_html( $average, $rating_count ); // WPCS: XSS ok. ?>
+		<?php if ( comments_open() ) : ?>
+			<?php //phpcs:disable ?>
+            <!-- <i class='bx bxs-star'></i>
+            <i class='bx bxs-star'></i>
+            <i class='bx bxs-star'></i>
+            <i class='bx bxs-star'></i>
+            <i class='bx bxs-star-half'></i> -->
+        </div>
+        <a href="#" class="rating-count">3 reviews</a>
+			<?php // phpcs:enable ?>
+		<?php endif ?>
+    </div>
 
 <?php endif; ?>

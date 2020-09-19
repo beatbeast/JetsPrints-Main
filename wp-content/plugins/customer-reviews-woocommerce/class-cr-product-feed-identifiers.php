@@ -127,6 +127,13 @@ class CR_Identifiers_Product_Feed {
   				'css'               => 'width: 500px;max-width:100%;'
   			),
         array(
+  				'id'       => 'ivole_product_feed_enable_id_str_dat',
+  				'title'    => __( 'Structured Data', IVOLE_TEXT_DOMAIN ),
+  				'desc'     => __( 'Add product identifiers to structured data markup on WooCommerce product pages. According to Google\'s requirements, product identifiers will also be added to the HTML shown to visitors.', IVOLE_TEXT_DOMAIN ),
+  				'default'  => 'no',
+  				'type'     => 'checkbox'
+  			),
+        array(
   				'id'       => 'ivole_product_feed_identifiers',
   				'type'     => 'product_feed_identifiers'
   			),

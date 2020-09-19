@@ -12,21 +12,54 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Ivole_Google_Shopping_Feed {
 
 	const FEED_FILE = 'product_reviews.xml';
+	const TEMP_FEED_FILE = 'product_reviews_temp.xml';
 
 	/**
 	 * @var string The path to the feed file
 	 */
 	private $file_path;
+    /**
+     * @var string The path to the temp feed file
+     */
+    private $temp_file_path;
 
 	/**
 	 * @var array Full mapping of feed fields to woocommerce fields
 	 */
 	private $field_map;
+    private $cron_options;
 
 	public function __construct( $field_map = array() ) {
 		$this->file_path = IVOLE_CONTENT_DIR . '/' . self::FEED_FILE;
+		$this->temp_file_path = IVOLE_CONTENT_DIR . '/' . self::TEMP_FEED_FILE;
 		$this->field_map = $field_map;
+
+        $this->cron_options = get_option( 'ivole_product_reviews_feed_cron', array(
+            'started' => false,
+            'offset' => 0,
+            'limit'  => 200,
+        ));
 	}
+
+    public function start_cron() {
+        $this->cron_options['started'] = true;
+        $this->cron_options['offset'] = 0;
+
+        update_option('ivole_product_reviews_feed_cron', $this->cron_options);
+    }
+
+    public function finish_cron( $w_file ) {
+        $this->cron_options['started'] = false;
+        $this->cron_options['offset'] = 0;
+        update_option( 'ivole_product_reviews_feed_cron', $this->cron_options );
+
+        if( $w_file ) {
+            file_put_contents( $this->temp_file_path, "</reviews>" . PHP_EOL . "</feed>", FILE_APPEND );
+            rename( $this->temp_file_path, $this->file_path );
+        }
+
+        wp_clear_scheduled_hook( 'ivole_generate_product_reviews_feed_chunk' );
+    }
 
 	/**
 	 * Generates the XML feed file
@@ -34,61 +67,80 @@ class Ivole_Google_Shopping_Feed {
 	 * @since 3.47
 	 */
 	public function generate() {
-		$reviews = $this->get_review_data();
 
-		// Exit if there are no reviews
-		if ( count( $reviews ) < 1 ) {
+		if(!$this->is_enabled()){
+			$this->deactivate();
 			return;
 		}
 
+		$reviews = $this->get_review_data();
+
 		// Exit if XML library is not available
 		if( ! class_exists( 'XMLWriter' ) ) {
+			$this->finish_cron( false );
 			return;
 		}
 
 		$xml_writer = new XMLWriter();
-		$xml_writer->openURI( $this->file_path );
+		//$xml_writer->openURI( $this->file_path );
+        $xml_writer->openMemory();
+        $xml_writer->setIndent( true );
 		if( !$xml_writer ) {
 			//no write access in the folder
-			return;
+            $this->finish_cron( false );
+            return;
 		}
-		$xml_writer->setIndent( true );
-		$xml_writer->startDocument( '1.0', 'UTF-8' );
 
-		// <feed>
-		$xml_writer->startElement( 'feed' );
-		$xml_writer->startAttribute( 'xmlns:vc' );
-		$xml_writer->text( 'http://www.w3.org/2007/XMLSchema-versioning' );
-		$xml_writer->endAttribute();
-		$xml_writer->startAttribute( 'xmlns:xsi' );
-		$xml_writer->text( 'http://www.w3.org/2001/XMLSchema-instance' );
-		$xml_writer->endAttribute();
-		$xml_writer->startAttribute( 'xsi:noNamespaceSchemaLocation' );
-		$xml_writer->text( 'http://www.google.com/shopping/reviews/schema/product/2.2/product_reviews.xsd' );
-		$xml_writer->endAttribute();
-		// <version>
-		$xml_writer->startElement( 'version' );
-		$xml_writer->text( '2.2' );
-		$xml_writer->endElement();
-		// <aggregator>
-		$xml_writer->startElement( 'aggregator' );
-		// <name>
-		$xml_writer->startElement( 'name' );
-		$xml_writer->text( 'CR' );
-		$xml_writer->endElement();
-		$xml_writer->endElement();
-		// <publisher>
-		$xml_writer->startElement( 'publisher' );
-		// <name>
-		$xml_writer->startElement( 'name' );
-		$blog_name = get_option( 'ivole_shop_name', '' );
-		$blog_name = empty( $blog_name ) ? get_option( 'blogname' ) : $blog_name;
-		$xml_writer->text( $blog_name );
-		$xml_writer->endElement();
-		$xml_writer->endElement();
+        // Exit if there are no reviews
+        if ( count( $reviews ) < 1 ) {
+            unset( $xml_writer );
+            if( $this->cron_options['offset'] > 0 ) {
+                $this->finish_cron( true );
+            } else {
+                $this->finish_cron( false );
+            }
+            return;
+        }
 
-		// <reviews>
-		$xml_writer->startElement( 'reviews' );
+        if( $this->cron_options['offset'] == 0 ) {
+            $xml_writer->startDocument('1.0', 'UTF-8');
+
+            // <feed>
+            $xml_writer->startElement('feed');
+            $xml_writer->startAttribute('xmlns:vc');
+            $xml_writer->text('http://www.w3.org/2007/XMLSchema-versioning');
+            $xml_writer->endAttribute();
+            $xml_writer->startAttribute('xmlns:xsi');
+            $xml_writer->text('http://www.w3.org/2001/XMLSchema-instance');
+            $xml_writer->endAttribute();
+            $xml_writer->startAttribute('xsi:noNamespaceSchemaLocation');
+            $xml_writer->text('http://www.google.com/shopping/reviews/schema/product/2.3/product_reviews.xsd');
+            $xml_writer->endAttribute();
+            // <version>
+            $xml_writer->startElement('version');
+            $xml_writer->text('2.3');
+            $xml_writer->endElement();
+            // <aggregator>
+            $xml_writer->startElement('aggregator');
+            // <name>
+            $xml_writer->startElement('name');
+            $xml_writer->text('Cusrev');
+            $xml_writer->endElement();
+            $xml_writer->endElement();
+            // <publisher>
+            $xml_writer->startElement('publisher');
+            // <name>
+            $xml_writer->startElement('name');
+            $blog_name = get_option('ivole_shop_name', '');
+            $blog_name = empty($blog_name) ? get_option('blogname') : $blog_name;
+            $xml_writer->text($blog_name);
+            $xml_writer->endElement();
+            $xml_writer->endElement();
+
+            // <reviews>
+            $xml_writer->startElement('reviews');
+        }
+
 		foreach ( $reviews as $review ) {
 			// <review>
 			$xml_writer->startElement( 'review' );
@@ -216,13 +268,28 @@ class Ivole_Google_Shopping_Feed {
 			$xml_writer->endElement(); // </review>
 		}
 
-		$xml_writer->endElement(); // </reviews>
-		$xml_writer->endElement(); // </feed>
+		//$xml_writer->endElement(); // </reviews>
+		//$xml_writer->endElement(); // </feed>
 
-		$xml_writer->endDocument();
-		$xml_writer->flush();
+		//$xml_writer->endDocument();
+		//$xml_writer->flush();
+
+        if( false === file_put_contents( $this->temp_file_path, $xml_writer->flush( true ), FILE_APPEND ) ) {
+            //no write access to the file
+            unset( $xml_writer );
+            $this->finish_cron( false );
+            return;
+        }
+
 		unset( $xml_writer );
+
+        $this->reschedule_cron();
 	}
+
+    protected function reschedule_cron(){
+        wp_clear_scheduled_hook( 'ivole_generate_product_reviews_feed_chunk' );
+        wp_schedule_single_event(time(), 'ivole_generate_product_reviews_feed_chunk');
+    }
 
 	/**
 	 * Fetches reviews to include in the feed.
@@ -233,6 +300,11 @@ class Ivole_Google_Shopping_Feed {
 	 */
 	protected function get_review_data() {
 		global $wpdb;
+
+        $current_options = $this->cron_options;
+        $current_options['offset'] = $this->cron_options['offset'] + $this->cron_options['limit'];
+        update_option('ivole_product_reviews_feed_cron', $current_options);
+
 		$reviews = array();
 		//WPML integration
 		//fetch IDs of reviews (cannot use get_comments due to WPML that adds a hook to filter comments by language)
@@ -240,7 +312,9 @@ class Ivole_Google_Shopping_Feed {
 			$query_ids = "SELECT comms.comment_ID FROM $wpdb->comments comms " .
 			"INNER JOIN $wpdb->posts psts ON comms.comment_post_ID = psts.ID " .
 			"INNER JOIN $wpdb->commentmeta commsm ON comms.comment_ID = commsm.comment_id " .
-			"WHERE comms.comment_approved = '1' AND psts.post_type = 'product' AND commsm.meta_key = 'rating'";
+			"WHERE comms.comment_approved = '1' AND psts.post_type = 'product' AND commsm.meta_key = 'rating'" .
+            "LIMIT ".$this->cron_options['offset'].",".$this->cron_options['limit']
+            ;
 			$reviews_ids = $wpdb->get_col( $query_ids );
 			if( $reviews_ids ) {
 				$reviews_ids = array_map( 'intval', $reviews_ids );
@@ -256,7 +330,9 @@ class Ivole_Google_Shopping_Feed {
 				'status'    => 'approve',
 				'meta_key'	=> 'rating',
 				'update_comment_meta_cache' => true,
-				'update_comment_post_cache' => true
+				'update_comment_post_cache' => true,
+                'number' => $this->cron_options['limit'],
+                'offset' => $this->cron_options['offset'],
 			) );
 		}
 
@@ -361,6 +437,8 @@ class Ivole_Google_Shopping_Feed {
 			@mkdir( IVOLE_CONTENT_DIR, 0755 );
 		}
 
+        $this->deactivate();
+
 		do_action( 'ivole_generate_feed' );
 
 		if ( ! wp_next_scheduled( 'ivole_generate_feed' ) ) {
@@ -374,11 +452,19 @@ class Ivole_Google_Shopping_Feed {
 	 * @since 3.47
 	 */
 	public function deactivate() {
-		wp_clear_scheduled_hook( 'ivole_generate_feed' );
+        if ( wp_next_scheduled( 'ivole_generate_product_reviews_feed_chunk' ) ) wp_clear_scheduled_hook( 'ivole_generate_product_reviews_feed_chunk' );
+        if ( wp_next_scheduled( 'ivole_generate_feed' ) ) wp_clear_scheduled_hook( 'ivole_generate_feed' );
+
+        $this->cron_options['offset'] = 0;
+        $this->cron_options['started'] = false;
+        update_option('ivole_product_reviews_feed_cron', $this->cron_options);
 
 		if ( file_exists( $this->file_path ) ) {
 			@unlink( $this->file_path );
 		}
+        if ( file_exists( $this->temp_file_path ) ) {
+            @unlink( $this->temp_file_path );
+        }
 	}
 
 	/**
@@ -389,7 +475,7 @@ class Ivole_Google_Shopping_Feed {
 	 * @param string $field The name of the field to return a value for
 	 * @param WP_Comment $review The review to get the field value for
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public static function get_field( $field, $review ) {
 		$field_type = strstr( $field, '_', true );
@@ -416,9 +502,11 @@ class Ivole_Google_Shopping_Feed {
 						}
 						foreach( $variations_ids as $variation_id ) {
 							$variation = wc_get_product( $variation_id );
-							$temp = $variation->$func();
-							if( !empty( $temp ) ) {
-								$value[] = $temp;
+							if( $variation ) {
+								$temp = $variation->$func();
+								if( !empty( $temp ) ) {
+									$value[] = $temp;
+								}
 							}
 						}
 					}
@@ -441,9 +529,11 @@ class Ivole_Google_Shopping_Feed {
 						}
 						foreach( $variations_ids as $variation_id ) {
 							$variation = wc_get_product( $variation_id );
-							$temp = $variation->get_attribute( $field_key );
-							if( !empty( $temp ) ) {
-								$value[] = $temp;
+							if( $variation ) {
+								$temp = $variation->get_attribute( $field_key );
+								if( !empty( $temp ) ) {
+									$value[] = $temp;
+								}
 							}
 						}
 					}

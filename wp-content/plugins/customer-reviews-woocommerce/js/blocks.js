@@ -179,8 +179,6 @@
 		addQueryArgs = wp.url.addQueryArgs,
 		apiFetch = wp.apiFetch,
 		withInstanceId = wp.compose.withInstanceId,
-		BaseControl = wp.components.BaseControl,
-		ColorPicker = wp.components.ColorPicker,
 		find = lodash.find,
 		assign = lodash.assign,
 		SearchListControl = wc.components.SearchListControl,
@@ -205,7 +203,7 @@
 			.then( function( response ) {
 				return response.json();
 			})
-			.then( (function( list ) {;
+			.then( (function( list ) {
 				this.setState( { list: list, loading: false } );
 			}).bind(this) )
 			.catch( (function() {
@@ -418,14 +416,14 @@
 		return el(
 			BaseControl,
 			{
-				id: props.instanceId,
+				id: props.instanceId || Math.random(),
 				label: props.label || ''
 			},
 			[
 				el( ColorPicker, props )
 			]
 		);
-	}
+	};
 
 	registerBlockType('ivole/cusrev-reviews-grid', {
 		title: __( 'Reviews Grid', 'customer-reviews-woocommerce'),
@@ -488,6 +486,20 @@
 											onChange: function( count_shop_reviews ) {
 												props.setAttributes( {
 													count_shop_reviews: count_shop_reviews
+												} );
+											}
+										}
+									),
+									el(
+										RangeControl,
+										{
+											label: __( 'Show more', 'customer-reviews-woocommerce' ),
+											value: props.attributes.show_more,
+											min: 0,
+											max: 10,
+											onChange: function( show_more ) {
+												props.setAttributes( {
+													show_more: show_more
 												} );
 											}
 										}
@@ -755,6 +767,369 @@
 			);
 		} ),
 
+		save: function() {
+			return null;
+		}
+	});
+	registerBlockType('ivole/cusrev-reviews-slider', {
+		title: __( 'Reviews Slider', 'customer-reviews-woocommerce'),
+		icon: 'slides',
+		description: __( 'Block showing a slider with WooCommerce product reviews.', 'customer-reviews-woocommerce' ),
+		category: 'widgets',
+
+		edit: withSelect( function( select ) {
+			return {
+				settings: select( 'core/editor' ).getEditorSettings().cusrev
+			};
+		} )( function( props ) {
+
+			//init slider after render
+			let blockLoaded = false;
+			let blockLoadedInterval = setInterval(function() {
+
+				if (jQuery(".cr-reviews-slider").length) {
+
+					blockLoaded = true;
+
+					jQuery(".cr-reviews-slider").each(function () {
+						if(!jQuery(this).hasClass("slick-initialized")) jQuery(this).slick();
+					});
+				}
+				if ( blockLoaded ) {
+					clearInterval( blockLoadedInterval );
+				}
+			}, 1000);
+
+			if ( ! props.settings.reviews_shortcodes ) {
+				return el(
+					'div',
+					{},
+					el(
+						'em',
+						{},
+						__( 'You need to enable "Reviews Shortcodes" checkbox in Reviews > Settings > Review Extensions', 'customer-reviews-woocommerce' )
+					)
+				);
+			}
+
+			return el(
+				Fragment,
+				{},
+				[
+					el(
+						InspectorControls,
+						{},
+						[
+							el(
+								PanelBody,
+								{
+									title: __( 'Reviews Slider Settings', 'customer-reviews-woocommerce' )
+								},
+								[
+									el(
+										RangeControl,
+										{
+											label: __( 'Number of Reviews', 'customer-reviews-woocommerce' ),
+											value: props.attributes.count,
+											min: 1,
+											max: 6,
+											onChange: function( count ) {
+												props.setAttributes( {
+													count: count
+												} );
+											}
+										}
+									),
+									el(
+										RangeControl,
+										{
+											label: __( 'Number of Slides to Show', 'customer-reviews-woocommerce' ),
+											value: props.attributes.slides_to_show,
+											min: 1,
+											max: 6,
+											onChange: function( slides_to_show ) {
+												props.setAttributes( {
+													slides_to_show: slides_to_show
+												} );
+											}
+										}
+									),
+									el(
+										RangeControl,
+										{
+											label: __( 'Number of Shop Reviews', 'customer-reviews-woocommerce' ),
+											value: props.attributes.count_shop_reviews,
+											min: 0,
+											max: 3,
+											onChange: function( count_shop_reviews ) {
+												props.setAttributes( {
+													count_shop_reviews: count_shop_reviews
+												} );
+											}
+										}
+									),
+									el(
+										ToggleControl,
+										{
+											label: __( 'Show Products', 'customer-reviews-woocommerce' ),
+											checked: props.attributes.show_products,
+											onChange: function() {
+												props.setAttributes( {
+													show_products: ! props.attributes.show_products
+												} );
+											}
+										}
+									),
+									el(
+										ToggleControl,
+										{
+											label: __( 'Product Links', 'customer-reviews-woocommerce' ),
+											checked: props.attributes.product_links,
+											onChange: function() {
+												props.setAttributes( {
+													product_links: ! props.attributes.product_links
+												} );
+											}
+										}
+									),
+									el(
+										ToggleControl,
+										{
+											label: __( 'Shop Reviews', 'customer-reviews-woocommerce' ),
+											checked: props.attributes.shop_reviews,
+											onChange: function() {
+												props.setAttributes( {
+													shop_reviews: ! props.attributes.shop_reviews
+												} );
+											}
+										}
+									),
+									el(
+										ToggleControl,
+										{
+											label: __( 'Inactive Products', 'customer-reviews-woocommerce' ),
+											checked: props.attributes.inactive_products,
+											onChange: function() {
+												props.setAttributes( {
+													inactive_products: ! props.attributes.inactive_products
+												} );
+											}
+										}
+									),
+									el(
+										ToggleControl,
+										{
+											label: __( 'Autoplay', 'customer-reviews-woocommerce' ),
+											checked: props.attributes.autoplay,
+											onChange: function() {
+												props.setAttributes( {
+													autoplay: ! props.attributes.autoplay
+												} );
+											}
+										}
+									),
+									el(
+										ToggleControl,
+										{
+											label: __( 'Avatars', 'customer-reviews-woocommerce' ),
+											checked: props.attributes.avatars,
+											onChange: function() {
+												props.setAttributes( {
+													avatars: ! props.attributes.avatars
+												} );
+											}
+										}
+									),
+									el(
+										SelectControl,
+										{
+											label: __( 'Sort By', 'customer-reviews-woocommerce' ),
+											value: props.attributes.sort_by,
+											options: [
+												{
+													label: __( 'Date', 'customer-reviews-woocommerce' ),
+													value: 'date'
+												},
+												{
+													label: __( 'Rating', 'customer-reviews-woocommerce' ),
+													value: 'rating'
+												}
+											],
+											onChange: function( sort_by ) {
+												props.setAttributes( {
+													sort_by: sort_by
+												} );
+											}
+										}
+									),
+									el(
+										SelectControl,
+										{
+											label: __( 'Sort Order', 'customer-reviews-woocommerce' ),
+											value: props.attributes.sort,
+											options: [
+												{
+													label: __( 'Ascending', 'customer-reviews-woocommerce' ),
+													value: 'ASC'
+												},
+												{
+													label: __( 'Descending', 'customer-reviews-woocommerce' ),
+													value: 'DESC'
+												},
+												{
+													label: __( 'Random', 'customer-reviews-woocommerce' ),
+													value: 'RAND'
+												}
+											],
+											onChange: function( sort_order ) {
+												props.setAttributes( {
+													sort: sort_order
+												} );
+											}
+										}
+									),
+								]
+							),
+							el(
+								PanelBody,
+								{
+									title: __( 'Product Categories', 'customer-reviews-woocommerce' ),
+									initialOpen: false
+								},
+								[
+									el(
+										'div',
+										{},
+										__( 'Select which product categories to show reviews for.', 'customer-reviews-woocommerce' )
+									),
+									el(
+										ProductCategoryControl,
+										{
+											selected: props.attributes.categories,
+											onChange: function( value ) {
+												value = value || [];
+												var ids = value.map( function( category ) {
+													return category.id;
+												} );
+
+												props.setAttributes( {
+													categories: ids
+												} );
+											}
+										}
+									)
+								]
+							),
+							el(
+								PanelBody,
+								{
+									title: __( 'Products', 'customer-reviews-woocommerce' ),
+									initialOpen: false
+								},
+								[
+									el(
+										'div',
+										{},
+										__( 'Select which products to show reviews for.', 'customer-reviews-woocommerce' )
+									),
+									el(
+										ProductsControl,
+										{
+											selected: props.attributes.products,
+											onChange: function( value ) {
+												value = value || [];
+												var ids = value.map( function( product ) {
+													return product.id;
+												} );
+
+												props.setAttributes( {
+													products: ids
+												} );
+											}
+										}
+									)
+								]
+							),
+							el(
+								PanelBody,
+								{
+									title: __( 'Colors', 'customer-reviews-woocommerce' ),
+									initialOpen: false
+								},
+								[
+									el(
+										withInstanceId( pickerWithLabel ),
+										{
+											color: props.attributes.color_brdr,
+											label: __( 'Review Card Border', 'customer-reviews-woocommerce' ),
+											disableAlpha: true,
+											onChangeComplete: function( color ) {
+												props.setAttributes( {
+													color_brdr: color.hex
+												} );
+											}
+										}
+									),
+									el(
+										withInstanceId( pickerWithLabel ),
+										{
+											color: props.attributes.color_bcrd,
+											label: __( 'Review Card Background', 'customer-reviews-woocommerce' ),
+											disableAlpha: true,
+											onChangeComplete: function( color ) {
+												props.setAttributes( {
+													color_bcrd: color.hex
+												} );
+											}
+										}
+									),
+									el(
+										withInstanceId( pickerWithLabel ),
+										{
+											color: props.attributes.color_pr_bcrd,
+											label: __( 'Product Area Background', 'customer-reviews-woocommerce' ),
+											disableAlpha: true,
+											onChangeComplete: function( color ) {
+												props.setAttributes( {
+													color_pr_bcrd: color.hex
+												} );
+											}
+										}
+									),
+									el(
+										withInstanceId( pickerWithLabel ),
+										{
+											color: props.attributes.color_stars,
+											label: __( 'Stars', 'customer-reviews-woocommerce' ),
+											disableAlpha: true,
+											onChangeComplete: function( color ) {
+												props.setAttributes( {
+													color_stars: color.hex
+												} );
+											}
+										}
+									)
+								]
+							)
+						]
+					),
+					el(
+						Disabled,
+						{},
+						[
+							el(
+								ServerSideRender,
+								{
+									block: 'ivole/cusrev-reviews-slider',
+									attributes:  props.attributes
+								}
+							)
+						]
+					)
+				]
+
+			);
+		}),
 		save: function() {
 			return null;
 		}

@@ -3,13 +3,13 @@
 Plugin Name: Customer Reviews for WooCommerce
 Description: Customer Reviews for WooCommerce plugin helps you get more customer reviews for your shop by sending automated reminders and coupons.
 Plugin URI: https://wordpress.org/plugins/customer-reviews-woocommerce/
-Version: 3.122
+Version: 3.125
 Author: Customer Reviews
 Author URI: https://www.cusrev.com/business/
 Text Domain: customer-reviews-woocommerce
 Requires at least: 4.5
 WC requires at least: 3.6
-WC tested up to: 4.4
+WC tested up to: 4.5
 License: GPLv3
 
 Customer Reviews for WooCommerce is free software: you can redistribute it and/or modify
@@ -289,6 +289,12 @@ function ivole_set_duplicate_site_url_lock() {
 
 function ivole_generate_google_shopping_prod_feed() {
 	$feed = new CR_Google_Shopping_Prod_Feed();
+	$feed->start_cron();
+	$feed->generate();
+}
+
+function ivole_generate_google_shopping_prod_feed_chunk() {
+	$feed = new CR_Google_Shopping_Prod_Feed();
 	$feed->generate();
 }
 
@@ -301,11 +307,31 @@ function ivole_generate_google_shopping_reviews_feed() {
 	) );
 
 	$feed = new Ivole_Google_Shopping_Feed( $field_map );
+    $feed->start_cron();
 	$feed->generate();
 }
 
+function ivole_generate_google_shopping_reviews_feed_chunk() {
+    $field_map = get_option( 'ivole_google_field_map', array(
+        'gtin'  => '',
+        'mpn'   => '',
+        'sku'   => '',
+        'brand' => ''
+    ) );
+
+    $feed = new Ivole_Google_Shopping_Feed( $field_map );
+    $feed->generate();
+}
+
+//daily hook
 add_action( 'ivole_generate_prod_feed', 'ivole_generate_google_shopping_prod_feed' );
+//chunk hook
+add_action( 'ivole_generate_prod_feed_chunk', 'ivole_generate_google_shopping_prod_feed_chunk' );
+
+//reviews daily hook
 add_action( 'ivole_generate_feed', 'ivole_generate_google_shopping_reviews_feed' );
+//reviews chunk hook
+add_action( 'ivole_generate_product_reviews_feed_chunk', 'ivole_generate_google_shopping_reviews_feed_chunk' );
 
 function ivole_add_block_editor_settings( $settings, $post ) {
 	$settings['cusrev'] = array(

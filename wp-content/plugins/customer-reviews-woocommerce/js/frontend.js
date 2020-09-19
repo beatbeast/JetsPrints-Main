@@ -259,4 +259,73 @@ jQuery(document).ready(function($) {
     jQuery("#reviews.cr-reviews-ajax-reviews div.cr-ajax-reviews-cus-images-modal").removeClass("cr-mask-active");
     jQuery("body").removeClass("cr-noscroll");
   });
+  //Product variations
+  $( ".single_variation_wrap" ).on( "show_variation", function ( event, variation ) {
+    if(jQuery(".cr_gtin").length){
+      jQuery(".cr_gtin_val").text(variation._cr_gtin);
+    }
+    if(jQuery(".cr_mpn").length){
+      jQuery(".cr_mpn_val").text(variation._cr_mpn);
+    }
+    if(jQuery(".cr_brand").length){
+      jQuery(".cr_brand_val").text(variation._cr_brand);
+    }
+  });
+  //Reset Product variations
+  jQuery(document).on('reset_data', function () {
+
+    var $cr_gtin = jQuery(".cr_gtin"),
+        $cr_mpn = jQuery(".cr_mpn"),
+        $cr_brand = jQuery(".cr_brand");
+
+    if($cr_gtin.length){
+      jQuery(".cr_gtin_val").text($cr_gtin.data("o_content"));
+    }
+    if($cr_mpn.length){
+      jQuery(".cr_mpn_val").text($cr_mpn.data("o_content"));
+    }
+    if($cr_brand.length){
+      jQuery(".cr_brand_val").text($cr_brand.data("o_content"));
+    }
+  });
+  //show more ajax reviews in the grid
+  jQuery(".ivole-show-more-button").on("click", function (e) {
+    e.preventDefault();
+
+    var $this = jQuery(this),
+    $spinner =  $this.next(".ivole-show-more-spinner"),
+    attributes = $this.parents(".ivole-reviews-grid").data("attributes"),
+    offset = $this.data("offset");
+
+    attributes.offset = offset;
+    attributes.count = attributes.show_more;
+
+    var grid_data = {
+      'action': "ivole_show_more_grid_reviews",
+      'attributes': attributes
+    };
+
+    $this.hide();
+    $spinner.show();
+
+    jQuery.post(ajax_object.ajax_url, grid_data, function(response) {
+      $spinner.hide();
+
+      $this.data("offset",offset+attributes.show_more);
+
+      $reviews = jQuery(response.html).find(".ivole-reviews-grid-inner");
+
+      if($reviews.length){
+        $this.parents(".ivole-reviews-grid").find(".ivole-reviews-grid-inner").append($reviews.html());
+        $this.show();
+      } else {
+        $this.hide();
+      }
+    }).fail(function(response) {
+      $spinner.hide();
+      $this.show();
+
+      $this.parent().append('<div style="color: #cd2653;text-align: center;display: block;">'+response.responseText+'</div>');
+    });
+  });
 });

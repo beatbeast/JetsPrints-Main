@@ -1,0 +1,10 @@
+2020-09-14T08:02:07+00:00 CRITICAL Cannot redeclare WC() (previously declared in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\woocommerce\woocommerce.php:47) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\woocommerce.php on line 46
+
+2020-09-14T08:02:29+00:00 CRITICAL Cannot redeclare WC() (previously declared in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\woocommerce\woocommerce.php:47) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\woocommerce.php on line 46
+
+2020-09-14T08:18:59+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 163
+
+2020-09-14T08:44:35+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 463
+
+2020-09-14T10:37:53+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 163
+

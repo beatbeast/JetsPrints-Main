@@ -25,7 +25,7 @@ if ( ! class_exists( 'CR_Product_Fields' ) ) :
 				add_action( 'woocommerce_variation_options_pricing', array( $this, 'display_fields_variation'), 10, 3 );
 				add_action( 'woocommerce_variation_options', array( $this, 'display_fields_variation_options'), 10, 3 );
 				add_action( 'woocommerce_admin_process_variation_object', array( $this, 'save_fields_variation' ), 10, 2 );
-			}
+      }
 	  }
 
 		public function display_fields() {

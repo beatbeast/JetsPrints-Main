@@ -24,7 +24,7 @@ if ( ! class_exists( 'Ivole_License' ) ) :
 				'licenseKey' => $licenseKey,
         'shopDomain' => Ivole_Email::get_blogurl()
 			);
-			$api_url = 'https://z4jhozi8lc.execute-api.us-east-1.amazonaws.com/v1/check-license';
+			$api_url = 'https://api.cusrev.com/v1/production/check-license';
       $data_string = json_encode($data);
       $ch = curl_init();
   		curl_setopt( $ch, CURLOPT_URL, $api_url );
@@ -76,7 +76,7 @@ if ( ! class_exists( 'Ivole_License' ) ) :
 				'licenseKey' => $new_license,
         'shopDomain' => Ivole_Email::get_blogurl()
 			);
-      $api_url = 'https://z4jhozi8lc.execute-api.us-east-1.amazonaws.com/v1/register-license';
+			$api_url = 'https://api.cusrev.com/v1/production/register-license';
       $data_string = json_encode($data);
       $ch = curl_init();
   		curl_setopt( $ch, CURLOPT_URL, $api_url );

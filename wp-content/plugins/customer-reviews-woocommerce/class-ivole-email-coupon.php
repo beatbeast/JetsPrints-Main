@@ -122,7 +122,7 @@ class Ivole_Email_Coupon {
 			if( $coupon_type === 'static' ) {
 				$coupon_id = get_option( 'ivole_existing_coupon', 0 );
 			} else {
-				$coupon_id = $this->generate_coupon( $to, $review_id );
+				$coupon_id = $this->generate_coupon( $to, $order_id );
 			}
 			if( $coupon_id > 0 && get_post_type( $coupon_id ) === 'shop_coupon' && get_post_status( $coupon_id ) === 'publish' && $order_id > 0 ) {
 				$this->to = $to;
@@ -159,7 +159,7 @@ class Ivole_Email_Coupon {
 				}
 
 				$this->replace['coupon-code'] = $coupon_code;
-				$this->replace['product-name'] = $product_name;
+				//$this->replace['product-name'] = $product_name;
 				$this->replace['discount-amount'] = $discount_string;
 
 				$bcc_address = get_option( 'ivole_coupon_email_bcc', '' );
@@ -283,10 +283,13 @@ class Ivole_Email_Coupon {
 	 * Generate a coupon for the given email
 	 *
 	 * @access public
-	 * @return id of generated coupon | false
+	 * @return int|false id of generated coupon
 	 */
 	public function generate_coupon( $to, $review_id = 0 ) {
-		$unique_code = (!empty( $to)) ? strtoupper( uniqid( substr( preg_replace('/[^a-z0-9]/i', '', sanitize_title( $to ) ), 0, 5 ) ) ) : strtoupper( uniqid() );
+
+    $prefix = get_option( 'ivole_coupon_prefix', "" );
+
+		$unique_code = $prefix.(!empty( $to)) ? strtoupper( uniqid( substr( preg_replace('/[^a-z0-9]/i', '', sanitize_title( $to ) ), 0, 5 ) ) ) : strtoupper( uniqid() );
 		$coupon_args = array(
 			'post_title' 	=> $unique_code,
 			'post_content' 	=> '',

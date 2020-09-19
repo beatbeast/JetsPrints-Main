@@ -35,8 +35,24 @@ class CR_Product_Feed_Admin_Menu {
         }
 
         add_action( 'admin_init', array( $this, 'save_settings' ) );
+        add_action( 'admin_init', array( $this, 'check_cron' ) );
         add_action( 'admin_menu', array( $this, 'register_settings_menu' ), 11 );
         add_action( 'admin_enqueue_scripts', array( $this, 'load_product_feed_css_js' ) );
+    }
+
+    public function check_cron(){
+      if ( current_user_can( 'manage_options' ) ) {
+        //XML Product Feed
+        $cron_options = get_option( 'ivole_product_feed_cron', array('started' => false) );
+        if( $cron_options['started'] ){
+          WC_Admin_Settings::add_message( __( 'XML Product Feed for Google Shopping is being generated in background', IVOLE_TEXT_DOMAIN ) );
+        }
+        //XML Product Review Feed
+        $review_cron_options = get_option( 'ivole_product_reviews_feed_cron', array('started' => false) );
+        if( $review_cron_options['started'] ){
+          WC_Admin_Settings::add_message( __( 'XML Product Review Feed for Google Shopping is being generated in background', IVOLE_TEXT_DOMAIN ) );
+        }
+      }
     }
 
     public function register_settings_menu() {

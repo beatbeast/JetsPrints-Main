@@ -1,10 +1,10 @@
 === WooCommerce Services ===
-Contributors: automattic, woothemes, allendav, kellychoffman, jkudish, jeffstieler, nabsul, robobot3000, danreylop, mikeyarce, shaunkuschel, orangesareorange, pauldechov, dappermountain, radogeorgiev, bor0, royho, cshultz88, bartoszbudzanowski, harriswong, ferdev, superdav42
+Contributors: woocommerce, automattic, woothemes, allendav, kellychoffman, jkudish, jeffstieler, nabsul, robobot3000, danreylop, mikeyarce, shaunkuschel, orangesareorange, pauldechov, dappermountain, radogeorgiev, bor0, royho, cshultz88, bartoszbudzanowski, harriswong, ferdev, superdav42
 Tags: shipping, stamps, usps, woocommerce, taxes, payment, stripe
 Requires at least: 4.6
 Requires PHP: 5.3
-Tested up to: 5.4
-Stable tag: 1.23.2
+Tested up to: 5.5
+Stable tag: 1.24.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,44 @@ As of the WooCommerce 3.5 release, WooCommerce Services no longer provides shipp
 
 == Changelog ==
 
+= 1.24.3 - 2020-09-16 =
+* Fix   - Asset paths incompatible with some hosts
+* Fix   - Select all posts checkbox not working
+* Fix   - Use of deprecated jQuery.load
+* Tweak - Updating carrier logo and tracking links
+
+= 1.24.2 - 2020-09-03 =
+* Fix   - Optional preloading for wc-admin install compatibility
+* Fix   - Remove duplicate rate errors
+* Fix   - Compatibility with WooCommerce order page install prompt
+* Add   - Introduce 'wc_connect_meta_box_payload' filter for modifying order data
+* Tweak - Update UPS failed connection error message
+
+= 1.24.1 - 2020-08-19 =
+* Tweak - Zip/Postcode/Postal code messaging consistency
+* Fix   - Services management CSS table layout
+* Fix   - Carrier "disconnect modal" layout
+* Fix   - Primary button busy state updated to match color
+* Fix   - Remove padding from notice bar
+* Fix   - Add missing box in rate step for how much customer paid for shipping
+* Tweak - Bump WP tested version to 5.5
+* Fix   - Issue with dismiss modal popup blocking access to edit order
+
+= 1.24.0 - 2020-07-30 =
+* Fix   - PHP 7.4 notice for taxes at checkout.
+* Add   - Carrier logos next to rates.
+* Tweak - Remove spinner from create shipping label button
+* Add   - Upgrade React to 16.13
+* Add   - Optimize bundle
+* Fix   - Fix svg images not showing on dev
+* Fix   - Fix 404 taxjar.js on new order page
+* Add   - Add e2e tests for toggling shipping label
+* Add   - Add e2e tests for label refund
+* Fix   - Show which nexus automatted taxes will work with and link to doc
+* Fix   - Fix localization issues
+* Tweak - Improve service listing readability
+* Add   - Support UPS as a carrier (beta)
+
 = 1.23.2 - 2020-06-12 =
 * Fix   - Refund not possible on order page.
 
@@ -120,33 +158,3 @@ As of the WooCommerce 3.5 release, WooCommerce Services no longer provides shipp
 
 = 1.22.1 =
 * Fix   - Remove nuisance admin notification.
-
-= 1.22.0 =
-
-* Add   - Display notices when base country/currency mismatches.
-* Add   - Friendlier error codes when the API service is down.
-* Add   - Introduce custom package setting on the label screen.
-* Add   - Shipping Summary to the sidebar on the label screen.
-* Add   - Shipping rates additional data - tracking, delivery time, signatures.
-* Add   - Tracking modal.
-* Add   - Ability to recreate labels for individual packages that have been refunded in a multi-label package scenario.
-* Fix   - Deprecation notices for PHP 7.4.
-* Fix   - Quantity is not being taken into account for the notice "n items are ready for shipment".
-* Tweak - Credit card no longer required to configure shipping label.
-* Tweak - Moved "Create Shipping Label" button from sidebar to the top of the order screen.
-* Tweak - Preselect last used package on the label screen.
-* Tweak - Remove rates from the dropdown and list them on the page after a package is selected.
-* Tweak - Remove redundant "Paper Size" from the label screen since it's configurable from the Settings screen.
-* Tweak - Show create label button in 'busy' state until data loads.
-* Tweak - UX improvements for the label screen.
-
-= 1.21.1 =
-
-* Update WooCommerce compatibility to 3.7
-* Support namespaced Jetpack methods
-
-= 1.21.0 =
-
-* Update WordPress compatibility to 5.2
-* When there's only one credit card available, select it as the default for purchases
-* Add ability to specify payment method during label purchase to enable choosing a credit card during purchase in the future

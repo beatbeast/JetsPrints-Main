@@ -1,0 +1,10 @@
+2020-08-30T07:36:59+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\advanced-custom-fields-pro\includes\fields\class-acf-field-range.php on line 3
+
+2020-08-30T07:37:06+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 463
+
+2020-08-30T07:37:34+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\wp-db.php on line 2033
+
+2020-08-30T07:39:34+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 441
+
+2020-08-30T09:09:00+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 441
+

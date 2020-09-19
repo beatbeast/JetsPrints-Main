@@ -18,7 +18,7 @@ if ( ! class_exists( 'Ivole_StructuredData' ) ) :
 				'mpn'   => '',
 				'brand' => ''
 			) );
-			if( is_array( $this->identifiers ) ) {
+			if( is_array( $this->identifiers ) && 'yes' === get_option( 'ivole_product_feed_enable_id_str_dat', 'no' ) ) {
 				if( ( isset( $this->identifiers['gtin'] ) && $this->identifiers['gtin'] )
 					|| ( isset( $this->identifiers['mpn'] ) && $this->identifiers['mpn'] )
 					|| (isset( $this->identifiers['brand'] ) && $this->identifiers['brand'] ) ) {
@@ -26,6 +26,7 @@ if ( ! class_exists( 'Ivole_StructuredData' ) ) :
 					$this->static_brand = trim( get_option( 'ivole_google_brand_static', '' ) );
 					add_filter( 'woocommerce_structured_data_product', array( $this, 'filter_woocommerce_structured_data_product' ), 10, 2 );
 					add_action( 'woocommerce_product_meta_end', array( $this, 'action_woocommerce_structured_data_review' ) );
+					add_filter( 'woocommerce_available_variation', array( $this, 'filter_woocommerce_available_variation'), 10, 3 );
 				}
 			}
 			if( 'yes' == get_option( 'ivole_attach_image', 'no' ) ) {
@@ -102,13 +103,15 @@ if ( ! class_exists( 'Ivole_StructuredData' ) ) :
 			if( isset( $this->identifiers['gtin'] ) ) {
 				$gtin = CR_Google_Shopping_Prod_Feed::get_field( $this->identifiers['gtin'], $product );
 				if( $gtin ) {
-					echo $space . '<span class="cr_gtin">' . __( 'GTIN: ', IVOLE_TEXT_DOMAIN ) . $gtin . '</span>';
+					echo $space . '<span class="cr_gtin" data-o_content="' . $gtin . '">' . __( 'GTIN: ', IVOLE_TEXT_DOMAIN ) .
+						'<span class="cr_gtin_val">' . $gtin . '</span></span>';
 				}
 			}
 			if( isset( $this->identifiers['mpn'] ) ) {
 				$mpn = CR_Google_Shopping_Prod_Feed::get_field( $this->identifiers['mpn'], $product );
 				if( $mpn ) {
-					echo $space . '<span class="cr_mpn">' . __( 'MPN: ', IVOLE_TEXT_DOMAIN ) . $mpn . '</span>';
+					echo $space . '<span class="cr_mpn" data-o_content="' . $mpn . '">' . __( 'MPN: ', IVOLE_TEXT_DOMAIN ) .
+						'<span class="cr_mpn_val">' . $mpn . '</span></span>';
 				}
 			}
 			if( isset( $this->identifiers['brand'] ) ) {
@@ -117,9 +120,59 @@ if ( ! class_exists( 'Ivole_StructuredData' ) ) :
 					$brand = $this->static_brand;
 				}
 				if( $brand ) {
-					echo $space . '<span class="cr_brand">' . __( 'Brand: ', IVOLE_TEXT_DOMAIN ) . $brand . '</span>';
+					echo $space . '<span class="cr_brand" data-o_content="' . $brand . '">' . __( 'Brand: ', IVOLE_TEXT_DOMAIN ) .
+						'<span class="cr_brand_val">' . $brand . '</span></span>';
 				}
 			}
+		}
+
+		/**
+		* @var $variations array
+		* @var $product WC_Product_Variable
+		* @var $variation WC_Product_Variation
+		*
+		* @return array
+		*/
+		public function filter_woocommerce_available_variation( $variations, $product, $variation ) {
+			if( isset( $this->identifiers['gtin'] ) ) {
+				$gtin = CR_Google_Shopping_Prod_Feed::get_field( $this->identifiers['gtin'], $variation );
+				if( $gtin ) {
+					$variations['_cr_gtin'] = $gtin;
+				} else {
+					$gtin = CR_Google_Shopping_Prod_Feed::get_field( $this->identifiers['gtin'], $product );
+					if( $gtin ) {
+						$variations['_cr_gtin'] = $gtin;
+					}
+				}
+			}
+			if( isset( $this->identifiers['mpn'] ) ) {
+				$mpn = CR_Google_Shopping_Prod_Feed::get_field( $this->identifiers['mpn'], $variation );
+				if( $mpn ) {
+					$variations['_cr_mpn'] = $mpn;
+				} else {
+					$mpn = CR_Google_Shopping_Prod_Feed::get_field( $this->identifiers['mpn'], $product );
+					if( $mpn ) {
+						$variations['_cr_mpn'] = $mpn;
+					}
+				}
+			}
+			if( isset( $this->identifiers['brand'] ) ) {
+				$brand = CR_Google_Shopping_Prod_Feed::get_field( $this->identifiers['brand'], $variation );
+				if( $brand ) {
+					$variations['_cr_brand'] = $brand;
+				} else {
+					$brand = CR_Google_Shopping_Prod_Feed::get_field( $this->identifiers['brand'], $product );
+					if( $brand ) {
+						$variations['_cr_brand'] = $brand;
+					} else {
+						$brand = $this->static_brand;
+						if( $brand ) {
+							$variations['_cr_brand'] = $brand;
+						}
+					}
+				}
+			}
+			return $variations;
 		}
 
 	}

@@ -1,0 +1,12 @@
+2020-09-18T00:24:55+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 463
+
+2020-09-18T04:56:38+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-admin\includes\post.php on line 2478
+
+2020-09-18T06:27:27+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-admin\includes\class-wp-filesystem-direct.php on line 66
+
+2020-09-18T07:27:35+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 463
+
+2020-09-18T07:43:36+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 463
+
+2020-09-18T10:15:37+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-admin\includes\class-wp-filesystem-direct.php on line 173
+

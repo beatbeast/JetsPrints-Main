@@ -1,7 +1,7 @@
 p.iv-comment-image-text { margin-bottom: 0.5em; font-size: 0.9em; }
 p.iv-comment-video-text { margin-bottom: 0.5em; }
 div.iv-comment-image { width: 150px; float: left; margin-right: 5px; }
-div.iv-comment-image-top { width: 150px; display: inline-block; margin-right: 5px; vertical-align: top; }
+div.iv-comment-image-top { width: 150px; display: inline-block; margin-right: 5px; vertical-align: top; max-height: 150px; }
 div.iv-comment-video { width: 150px; float: left; margin-right: 5px; position: relative; }
 div.iv-comment-video video.ivole-video-a { max-width: 100%; height: auto; }
 div.iv-comment-video img.iv-comment-video-icon { position: absolute; top: 50%; left: 50%; width: 50px; margin-top: -25px; margin-left: -25px; }
@@ -389,11 +389,14 @@ img.ivole-verified-badge-ext-icon {
 .woocommerce #content div.product #reviews .comment-text span.ivf-custom-question-rating { padding-right: 5px; font-weight: 550; vertical-align: middle; }
 .woocommerce #content div.product #reviews .comment-text span.ivf-star-rating span.dashicons { font-size: 15px; height: 15px; width: 15px; vertical-align: middle; }
 .checkbox input.cr-customer-consent-checkbox {margin-right:7px;}
-#cr-show-more-reviews-id {
+.cr-show-more{
+  width:100%;
+}
+#cr-show-more-reviews-id, .ivole-show-more-button{
   display: block;
   margin: 10px auto;
 }
-#cr-show-more-review-spinner {
+#cr-show-more-review-spinner, .cr-show-more .ivole-show-more-spinner{
   display: block;
   margin: 10px auto;
   background: url(../img/spinner-2x.gif) no-repeat;
@@ -404,7 +407,7 @@ img.ivole-verified-badge-ext-icon {
 #cr-ajax-reviews-sort {
   display: block;
   margin: 1em 0px;
-  background: ##eff1f3;
+  background: #eff1f3;
   border: 1px solid;
   border-radius: 4px 4px 4px 4px;
   border-color: #ADB1B8 #A2A6AC #8D9096;
@@ -463,6 +466,7 @@ button.cr-ajax-reviews-add-review:hover {
 #reviews.cr-reviews-ajax-reviews div.cr-ajax-reviews-cus-images-div2 {
   white-space: nowrap;
   overflow-x: scroll;
+  overflow-y: hidden;
 }
 #reviews.cr-reviews-ajax-reviews div.cr-ajax-reviews-cus-images-mask {
   position: fixed;
@@ -525,6 +529,7 @@ button.cr-ajax-reviews-add-review:hover {
   width: 14px;
   height: 14px;
   font-size: 14px;
+  color: #333333;
 }
 #reviews.cr-reviews-ajax-reviews div.cr-ajax-reviews-cus-images-modal div.cr-ajax-reviews-cus-images-slider-nav {
   width: 80%;

@@ -1,0 +1,18 @@
+2020-09-01T07:36:40+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\l10n.php on line 741
+
+2020-09-01T07:36:40+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\advanced-custom-fields-pro\includes\fields\class-acf-field-number.php on line 3
+
+2020-09-01T07:36:40+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\advanced-custom-fields-pro\includes\fields\class-acf-field-number.php on line 3
+
+2020-09-01T07:36:41+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\woocommerce\packages\woocommerce-admin\src\Features\ShippingLabelBanner.php on line 184
+
+2020-09-01T07:36:41+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\Payments\Integrations\Cheque.php on line 21
+
+2020-09-01T07:40:10+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 163
+
+2020-09-01T10:42:55+00:00 CRITICAL Cannot redeclare mytheme_add_woocommerce_support() (previously declared in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php:38) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 78
+
+2020-09-01T10:43:01+00:00 CRITICAL Cannot redeclare mytheme_add_woocommerce_support() (previously declared in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php:38) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 78
+
+2020-09-01T17:30:05+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\material-wp\paradox\inc\titan-framework\lib\class-option-upload.php on line 3
+

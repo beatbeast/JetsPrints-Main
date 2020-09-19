@@ -35,6 +35,8 @@ final class Ivole_Reviews_Grid {
 			add_action( 'admin_print_footer_scripts', array( $this, 'maybe_print_wc_settings' ) );
 			add_action( 'wp_ajax_ivole_fetch_product_categories', array( $this, 'fetch_product_categories' ) );
 			add_action( 'wp_ajax_ivole_fetch_products', array( $this, 'fetch_products' ) );
+      add_action( 'wp_ajax_ivole_show_more_grid_reviews', array( $this, 'show_more_reviews' ) );
+      add_action( 'wp_ajax_nopriv_ivole_show_more_grid_reviews', array( $this, 'show_more_reviews' ) );
 		}
 	}
 
@@ -138,7 +140,13 @@ final class Ivole_Reviews_Grid {
 					'avatars' => array(
 						'type' => 'boolean',
 						'default' => true
-					)
+					),
+          'show_more' => array(
+              'type' => 'number',
+              'default' => 0,
+              'minimum' => 0,
+              'maximum' => 10
+          ),
 				),
 
 				'render_callback' => array( $this, 'render_reviews_grid' )
@@ -157,13 +165,15 @@ final class Ivole_Reviews_Grid {
 	 */
 	public function render_reviews_grid( $attributes ) {
 		if ( get_option( 'ivole_reviews_shortcode', 'no' ) === 'no' ) {
-      return '';
+    	return '';
     }
 		$max_reviews = $attributes['count'];
 		$order_by = $attributes['sort_by'] === 'date' ? 'comment_date_gmt' : 'rating';
 		$order = $attributes['sort'];
 		$inactive_products = $attributes['inactive_products'];
 		$avatars = $attributes['avatars'];
+		$show_more = $attributes['show_more'];
+		$offset = isset($attributes['offset'])?$attributes['offset']:0;
 
 		$post_ids = $attributes['products'];
 		if ( count( $attributes['categories'] ) > 0 ) {
@@ -189,7 +199,8 @@ final class Ivole_Reviews_Grid {
 			'post_type'   => 'product',
 			'meta_key'    => 'rating',
 			'orderby'     => $order_by,
-			'post__in'    => $post_ids
+			'post__in'    => $post_ids,
+      'offset'      => $offset
 		);
 
 		if( !$inactive_products ) {
@@ -226,7 +237,8 @@ final class Ivole_Reviews_Grid {
 					'post_status' => 'publish',
 					'post_id'			=> $shop_page_id,
 					'meta_key'    => 'rating',
-					'orderby'     => $order_by
+					'orderby'     => $order_by,
+          'offset'      => $offset
 				);
 				$shop_reviews = [];
 				if( 'RAND' === $order ) {
@@ -343,7 +355,9 @@ final class Ivole_Reviews_Grid {
 				'shop_reviews' => 'false',
 				'count_shop_reviews' => 1,
 				'inactive_products' => 'false',
-				'avatars' => true
+				'avatars' => true,
+				'show_more' => 0,
+				'offset' => 0,
 			), $attributes, 'cusrev_reviews_grid' );
 
 			$attributes['count'] = absint( $attributes['count'] );
@@ -353,6 +367,7 @@ final class Ivole_Reviews_Grid {
 			$attributes['count_shop_reviews'] = absint( $attributes['count_shop_reviews'] );
 			$attributes['inactive_products'] = ( $attributes['inactive_products'] === 'true' );
 			$attributes['avatars'] = ( $attributes['avatars'] !== 'false' );
+      $attributes['show_more'] = absint( $attributes['show_more'] );
 
 			if ( ! is_array( $attributes['categories'] ) ) {
 				$attributes['categories'] = array_filter( array_map( 'trim', explode( ',', $attributes['categories'] ) ) );
@@ -536,6 +551,14 @@ final class Ivole_Reviews_Grid {
 			array(),
 			'3.61'
 		);
+
+        wp_register_script(
+            'ivole-frontend-js',
+            plugins_url('/js/frontend.js', __FILE__),
+            array(),
+            null,
+            true
+        );
 	}
 
 	public function ivole_enqueue_block_scripts() {
@@ -549,6 +572,12 @@ final class Ivole_Reviews_Grid {
 		}
 
 		wp_enqueue_style( 'ivole-reviews-grid' );
+        wp_localize_script( 'ivole-frontend-js', 'ajax_object',
+            array(
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+            )
+        );
+        wp_enqueue_script( 'ivole-frontend-js' );
 	}
 
 	public function ivole_enqueue_block_scripts_tbadge() {
@@ -584,6 +613,16 @@ final class Ivole_Reviews_Grid {
 				return $datetime2 - $datetime1;
 			}
 		}
+	}
+
+	public function show_more_reviews() {
+		$response = array();
+		$attributes = array();
+		if( isset( $_POST['attributes'] ) && is_array( $_POST['attributes'] ) ) $attributes = $_POST['attributes'];
+
+		$response['html'] = $html = $this->render_reviews_grid_shortcode( $attributes );
+
+		wp_send_json( $response );
 	}
 
 }

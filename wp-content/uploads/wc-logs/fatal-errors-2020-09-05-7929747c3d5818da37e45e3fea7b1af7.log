@@ -1,0 +1,14 @@
+2020-09-05T07:36:23+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\woocommerce-services\classes\class-wc-connect-shipping-method.php on line 3
+
+2020-09-05T07:36:23+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\woocommerce-services\classes\class-wc-connect-shipping-method.php on line 3
+
+2020-09-05T07:36:41+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\material-wp\paradox\inc\titan-framework\lib\class-option-multicheck.php on line 3
+
+2020-09-05T07:36:41+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\woocommerce\packages\woocommerce-admin\src\Schedulers\OrdersScheduler.php on line 8
+
+2020-09-05T07:40:24+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 163
+
+2020-09-05T07:40:24+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\Requests\Transport\cURL.php on line 163
+
+2020-09-05T09:33:14+00:00 CRITICAL syntax error, unexpected '}', expecting end of file in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\woocommerce.php on line 102
+

@@ -3,7 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="ivole-reviews-grid" id="<?php echo $id; ?>" style="<?php echo $section_style; ?>">
+<div class="ivole-reviews-grid" id="<?php echo $id; ?>" style="<?php echo $section_style; ?>" data-attributes="<?php echo wc_esc_json(wp_json_encode($attributes));?>">
+    <div class="ivole-reviews-grid-inner">
 	<?php foreach ( $reviews as $i => $review ):
 		$rating = intval( get_comment_meta( $review->comment_ID, 'rating', true ) );
 		$order_id = intval( get_comment_meta( $review->comment_ID, 'ivole_order', true ) );
@@ -84,4 +85,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</div>
 	<?php endforeach; ?>
+    </div>
+    <?php if ( $show_more ): ?>
+    <div class="cr-show-more">
+        <button class="ivole-show-more-button" type="button" data-offset="<?php echo $max_reviews;?>"><?php echo __( 'Show more', IVOLE_TEXT_DOMAIN ); ?></button>
+				<span class="ivole-show-more-spinner" style="display:none;"></span>
+    </div>
+    <?php endif; ?>
 </div>

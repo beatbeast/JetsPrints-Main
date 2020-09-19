@@ -1,0 +1,8 @@
+2020-08-28T11:16:34+00:00 CRITICAL Cannot redeclare mytheme_add_woocommerce_support() (previously declared in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php:38) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 78
+
+2020-08-28T11:16:37+00:00 CRITICAL Cannot redeclare mytheme_add_woocommerce_support() (previously declared in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php:38) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 78
+
+2020-08-28T11:16:42+00:00 CRITICAL Cannot redeclare mytheme_add_woocommerce_support() (previously declared in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php:38) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 78
+
+2020-08-28T11:16:45+00:00 CRITICAL Cannot redeclare mytheme_add_woocommerce_support() (previously declared in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php:38) in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\themes\pixis\functions.php on line 78
+

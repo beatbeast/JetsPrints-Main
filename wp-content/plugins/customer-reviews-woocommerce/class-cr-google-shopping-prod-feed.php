@@ -13,74 +13,120 @@ class CR_Google_Shopping_Prod_Feed {
 	 * @var string The path to the feed file
 	 */
 	private $file_path;
+	private $chunks_file_path;
 	private $include_variable;
+	private $cron_options;
 
 	public function __construct( ) {
 		$prod_feed = get_option( 'ivole_product_feed_file_url', '' );
 		$this->include_variable = get_option( 'ivole_product_feed_variations', 'no' );
+    $this->cron_options = get_option( 'ivole_product_feed_cron', array(
+      'started' => false,
+      'offset' => 0,
+      'limit'  => 200,
+    ));
+
 		$upload_url = wp_upload_dir();
 		if( !$prod_feed ) {
 			$prod_feed = '/cr/product_feed_' . uniqid() . '.xml';
 		}
 		$this->file_path = $upload_url['basedir'] . $prod_feed;
+		$this->chunks_file_path = $upload_url['basedir'] . '/cr/product_feed_temp.xml';
 	}
 
-	public function generate() {
-		$products = $this->get_product_data();
+  public function start_cron() {
+      $this->cron_options['started'] = true;
+      $this->cron_options['offset'] = 0;
 
-		// Exit if there are no products
-		if ( count( $products ) < 1 ) {
+      update_option('ivole_product_feed_cron', $this->cron_options);
+  }
+
+  public function finish_cron( $w_file ) {
+      $this->cron_options['started'] = false;
+      $this->cron_options['offset'] = 0;
+      update_option( 'ivole_product_feed_cron', $this->cron_options );
+
+			if( $w_file ) {
+				file_put_contents( $this->chunks_file_path, "</feed>", FILE_APPEND );
+	      rename( $this->chunks_file_path, $this->file_path );
+			}
+
+      wp_clear_scheduled_hook( 'ivole_generate_prod_feed_chunk' );
+  }
+
+	public function generate() {
+
+		if(!$this->is_enabled()){
+			$this->deactivate();
 			return;
 		}
 
+		$products = $this->get_product_data();
+
 		// Exit if XML library is not available
 		if( ! class_exists( 'XMLWriter' ) ) {
+			$this->finish_cron( false );
 			return;
 		}
 
 		$xml_writer = new XMLWriter();
-		$xml_writer->openURI( $this->file_path );
+		//$xml_writer->openURI( $this->file_path );
+    $xml_writer->openMemory();
+    $xml_writer->setIndent( true );
 		if( !$xml_writer ) {
 			//no write access in the folder
+			$this->finish_cron( false );
 			return;
 		}
-		$xml_writer->setIndent( true );
-		$xml_writer->startDocument( '1.0', 'UTF-8' );
 
-		// <feed>
-		$xml_writer->startElement( 'feed' );
-		$xml_writer->startAttribute( 'xmlns' );
-		$xml_writer->text( 'http://www.w3.org/2005/Atom' );
-		$xml_writer->endAttribute();
-		$xml_writer->startAttribute( 'xmlns:g' );
-		$xml_writer->text( 'http://base.google.com/ns/1.0' );
-		$xml_writer->endAttribute();
-		// <title>
-		$xml_writer->startElement( 'title' );
-		$blog_name = get_option( 'ivole_shop_name', '' );
-		$blog_name = empty( $blog_name ) ? get_option( 'blogname' ) : $blog_name;
-		$xml_writer->text( $blog_name );
-		$xml_writer->endElement();
-		// <link>
-		$xml_writer->startElement( 'link' );
-		$xml_writer->startAttribute( 'rel' );
-		$xml_writer->text( 'self' );
-		$xml_writer->endAttribute();
-		$xml_writer->startAttribute( 'href' );
-		$xml_writer->text( Ivole_Email::get_blogurl() );
-		$xml_writer->endAttribute();
-		$xml_writer->endElement();
-		// <updated>
-		$xml_writer->startElement( 'updated' );
-		$xml_writer->text( gmdate("Y-m-d\TH:i:s\Z") );
-		$xml_writer->endElement();
-		// <author>
-		$xml_writer->startElement( 'author' );
-		// <name>
-		$xml_writer->startElement( 'name' );
-		$xml_writer->text( 'CR' );
-		$xml_writer->endElement();
-		$xml_writer->endElement();
+    // Exit if there are no products
+    if ( count( $products ) < 1 ) {
+			unset( $xml_writer );
+      if( $this->cron_options['offset'] > 0 ) {
+				$this->finish_cron( true );
+			} else {
+				$this->finish_cron( false );
+			}
+      return;
+    }
+
+    if( $this->cron_options['offset'] == 0 ) {
+      $xml_writer->startDocument( '1.0', 'UTF-8' );
+      // <feed>
+      $xml_writer->startElement( 'feed' );
+      $xml_writer->startAttribute( 'xmlns' );
+      $xml_writer->text( 'http://www.w3.org/2005/Atom' );
+      $xml_writer->endAttribute();
+      $xml_writer->startAttribute( 'xmlns:g' );
+      $xml_writer->text( 'http://base.google.com/ns/1.0' );
+      $xml_writer->endAttribute();
+      // <title>
+      $xml_writer->startElement( 'title' );
+      $blog_name = get_option( 'ivole_shop_name', '' );
+      $blog_name = empty( $blog_name ) ? get_option( 'blogname' ) : $blog_name;
+      $xml_writer->text( $blog_name );
+      $xml_writer->endElement();
+      // <link>
+      $xml_writer->startElement( 'link' );
+      $xml_writer->startAttribute( 'rel' );
+      $xml_writer->text( 'self' );
+      $xml_writer->endAttribute();
+      $xml_writer->startAttribute( 'href' );
+      $xml_writer->text( Ivole_Email::get_blogurl() );
+      $xml_writer->endAttribute();
+      $xml_writer->endElement();
+      // <updated>
+      $xml_writer->startElement( 'updated' );
+      $xml_writer->text( gmdate("Y-m-d\TH:i:s\Z") );
+      $xml_writer->endElement();
+      // <author>
+      $xml_writer->startElement( 'author' );
+      // <name>
+      $xml_writer->startElement( 'name' );
+      $xml_writer->text( 'Cusrev' );
+      $xml_writer->endElement();
+      $xml_writer->endElement();
+  	}
 
 		// products
 		foreach ( $products as $review ) {
@@ -183,12 +229,25 @@ class CR_Google_Shopping_Prod_Feed {
 			$xml_writer->endElement(); // </entry>
 		}
 
-		$xml_writer->endElement(); // </feed>
+		//$xml_writer->endElement(); // </feed>
 
-		$xml_writer->endDocument();
-		$xml_writer->flush();
+		//$xml_writer->endDocument();
+		//$xml_writer->flush();
+    if( false === file_put_contents( $this->chunks_file_path, $xml_writer->flush( true ), FILE_APPEND ) ) {
+			//no write access to the file
+			unset( $xml_writer );
+			$this->finish_cron( false );
+			return;
+		}
 		unset( $xml_writer );
+
+		$this->reschedule_cron();
 	}
+
+	protected function reschedule_cron(){
+    wp_clear_scheduled_hook( 'ivole_generate_prod_feed_chunk' );
+    wp_schedule_single_event(time(), 'ivole_generate_prod_feed_chunk');
+  }
 
 	/**
 	 * Fetches reviews to include in the feed.
@@ -205,9 +264,14 @@ class CR_Google_Shopping_Prod_Feed {
 			'brand' => ''
 		) );
 
-		$products = array();
+		$current_options = $this->cron_options;
+    $current_options['offset'] = $this->cron_options['offset'] + $this->cron_options['limit'];
+		update_option('ivole_product_feed_cron', $current_options);
+
 		$products = wc_get_products( array(
-			'limit' => -1
+			//'limit' => -1
+			'limit' => $this->cron_options['limit'],
+			'offset' => $this->cron_options['offset'],
 		) );
 
 		if( 'yes' === $this->include_variable ) {
@@ -223,7 +287,9 @@ class CR_Google_Shopping_Prod_Feed {
 			// get variations
 			$variation_products = wc_get_products( array(
 			  'type' => 'variation',
-			  'limit' => -1,
+			  //'limit' => -1,
+        'limit' => $this->cron_options['limit'],
+        'offset' => $this->cron_options['offset'],
 			) );
 
 			$products = array_merge( $products, $variation_products );
@@ -398,9 +464,11 @@ class CR_Google_Shopping_Prod_Feed {
 			@mkdir( IVOLE_CONTENT_DIR, 0755 );
 		}
 
+		$this->deactivate();
+
 		do_action( 'ivole_generate_prod_feed' );
 
-		if ( ! wp_next_scheduled( 'ivole_generate_prod_feed' ) ) {
+		if ( ! wp_next_scheduled( 'ivole_generate_prod_feed' ) && $this->is_enabled()) {
 			wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'ivole_generate_prod_feed' );
 		}
 	}
@@ -411,10 +479,18 @@ class CR_Google_Shopping_Prod_Feed {
 	 * @since 3.47
 	 */
 	public function deactivate() {
-		wp_clear_scheduled_hook( 'ivole_generate_prod_feed' );
+        if ( wp_next_scheduled( 'ivole_generate_prod_feed_chunk' ) ) wp_clear_scheduled_hook( 'ivole_generate_prod_feed_chunk' );
+        if ( wp_next_scheduled( 'ivole_generate_prod_feed' ) ) wp_clear_scheduled_hook( 'ivole_generate_prod_feed' );
+
+    $this->cron_options['offset'] = 0;
+		$this->cron_options['started'] = false;
+    update_option('ivole_product_feed_cron', $this->cron_options);
 
 		if ( file_exists( $this->file_path ) ) {
 			@unlink( $this->file_path );
+		}
+		if ( file_exists( $this->chunks_file_path ) ) {
+			@unlink( $this->chunks_file_path );
 		}
 	}
 

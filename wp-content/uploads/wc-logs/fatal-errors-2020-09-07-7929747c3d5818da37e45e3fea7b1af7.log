@@ -1,0 +1,4 @@
+2020-09-07T16:02:38+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-content\plugins\advanced-custom-fields-pro\includes\fields\class-acf-field-relationship.php on line 3
+
+2020-09-07T16:04:42+00:00 CRITICAL Maximum execution time of 30 seconds exceeded in C:\MAMP\htdocs\webczar\april\jetsprints\wp-includes\wp-db.php on line 2033
+

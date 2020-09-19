@@ -3,14 +3,18 @@
 	border-width: 1px;
 	border-style: solid;
 	border-color: transparent;
+	display: block;
+	border-radius: 5px;
+	margin: 0;
+	width: 100%;
+}
+
+.ivole-reviews-grid div.ivole-reviews-grid-inner {
 	display: flex;
 	flex-wrap: wrap;
 	flex-flow: row wrap;
 	justify-content: space-around;
 	align-content: space-around;
-	border-radius: 5px;
-	margin: 0;
-	width: 100%;
 }
 
 .cr-reviews-slider{
